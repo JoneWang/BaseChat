@@ -1,0 +1,32 @@
+body{
+    background: url(../img/bg.gif);
+    padding-top: 90px;
+}
+
+.navbar .nav > li {
+    margin-left: 30px;
+}
+
+.span12{
+    background-color: #ffffff;
+}
+
+.hero-unit > p{
+    font-size: 15px;
+}
+
+.row-fluid{
+    background-color: #EEEEEE;
+}
+
+.margin_left_0{
+    margin-left: 0;
+}
+
+.span4{
+    background-color: #dcdcdc;
+}
+
+.intro{
+    margin: 20px;
+}
