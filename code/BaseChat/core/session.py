@@ -1,8 +1,6 @@
 # coding=utf-8
 import uuid
 
-__author__ = 'JoneWang'
-
 Sessions = {}
 
 class SessionManager():
@@ -33,9 +31,6 @@ class SessionManager():
         return self.sessions[session_id][user_id]['is_reply']
 
     def get_users(self, session_id):
-        """
-        获取指定会话中的所有用户
-        """
         if self.sessions.has_key(session_id):
             return self.sessions[session_id]['users']
         else:
@@ -53,7 +48,7 @@ class SessionManager():
     def change_unread_clean(self, session_id, user_id, values=None):
         if values:
             self.sessions[session_id]['users'][user_id]['unread_msg'].extend(values)
-            #print 'sesesesese #######################',self.sessions[session_id]['users'][user_id]['unread_msg']
+            #print '#######################',self.sessions[session_id]['users'][user_id]['unread_msg']
         else:
             self.sessions[session_id]['users'][user_id]['unread_msg'] = []
 

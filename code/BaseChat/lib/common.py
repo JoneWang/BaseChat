@@ -10,11 +10,9 @@ import datetime
 import re
 from settings import RESULT_TEMPLATE, REQUEST_TIMEOUT
 
-__author__ = 'JoneWang'
-
 def result(*args):
     """
-    返回结果格式
+    return result format
     """
     try:
         RESULT_TEMPLATE['error'] = args[0]
@@ -27,14 +25,14 @@ def result(*args):
 
 def get_current_time(format='%Y-%m-%d %H:%M:%S'):
     """
-    当前时间
+    current time of format
     """
     return str(time.strftime(format, time.localtime(time.time())))
 
 
 def get_security_key():
     """
-    生成密钥
+    generate security key
     """
     # 生成一个Population
     pop = [chr(i) for i in xrange(33, 126 + 1)]
@@ -44,7 +42,7 @@ def get_security_key():
 
 def get_auth_key():
     """
-    生成授权key
+    generate auth key
     """
     return str(md5.new(str(uuid.uuid1())).hexdigest())
 
@@ -52,7 +50,7 @@ def get_auth_key():
 
 def http_request(addr, port='80', path='/', params=None, request_method='GET', is_split=False):
     """
-    请求server数据
+    request http server data
     """
     if is_split:
         conn = httplib.HTTPConnection(addr, port, timeout=REQUEST_TIMEOUT)
@@ -94,7 +92,7 @@ def http_request(addr, port='80', path='/', params=None, request_method='GET', i
 
 def join_ids(id1, id2):
     """
-    拼接id
+    join id
     """
     if id1 > id2:
         id = ''.join([id1, id2])
@@ -123,7 +121,7 @@ class Test():
         time_second = usedtime - time_hour * 3600 - time_minute * 60
         time_micsecond = (t.microseconds - t.microseconds / 1000000) / 1000
 
-        retstr = "%d天%d小时%d分%d秒%d毫秒" % (time_day, time_hour, time_minute, time_second, time_micsecond)
+        retstr = "%ddate%dhour%dminute%dsecond%dmillisecond" % (time_day, time_hour, time_minute, time_second, time_micsecond)
         return retstr
 
 

@@ -2,8 +2,6 @@
 from BaseChat.default import CACHE_EXPIRE
 import time, datetime
 
-__author__ = 'JoneWang'
-
 CacheData = {}
 
 class Cache():
@@ -16,7 +14,7 @@ class Cache():
 
     def set(self, key, value, expire=None):
         """
-        写入缓存
+        write cache
         """
         begin_time = datetime.datetime(*time.localtime()[:6])
         end_time = begin_time +\
@@ -30,7 +28,7 @@ class Cache():
 
     def get(self, key):
         """
-        读取缓存
+        read cache
         """
         now_time = datetime.datetime(*time.localtime()[:6])
         if self.cache.has_key(key):
@@ -44,14 +42,14 @@ class Cache():
 
     def remove(self, key):
         """
-        移除缓存
+        delete cache
         """
         if self.cache.has_key(key):
             del self.cache[key]
 
     def reclock(self, *args):
         """
-        重新计时缓存，可传入多个key值
+        relock cache data
         """
         for arg in args:
             value = self.get(arg)

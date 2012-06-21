@@ -1,10 +1,6 @@
 # coding=utf-8
 
-__author__ = 'JoneWang'
-
-# 默认配置
-# core中代码在读取项目settings.py文件时
-# 如果未设置某些配置则按此处配置为默认配置
+# default setting
 
 try:
     from settings import CACHE_EXPIRE

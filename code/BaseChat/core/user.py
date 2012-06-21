@@ -86,9 +86,6 @@ class UserManager():
         self.users[user_id]['event'].append(Event())
 
     def get_status(self, user_id):
-        """
-        获取用户状态
-        """
         if self.users.has_key(user_id):
             return self.users[user_id]['status']
         else:
