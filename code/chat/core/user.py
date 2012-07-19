@@ -1,82 +1,72 @@
 # coding=utf-8
 from gevent.event import Event
+from chat.lib.enum import Enum
 
 
 Users = {}
 
 
-class UserStatus():
-    def __init__(self):
-        self.busy = 1
-        self.leave = 2
-        self.online = 3
-        self.offline = 4
+class UserManagerError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
 
-
-class ReplyStatus():
-    def __init__(self):
-        self.reply = 1
-        self.no_reply = 2
-
-
-class UserType():
-    def __init__(self):
-        pass
+    def __str__(self):
+        return repr(self.msg)
 
 
 class UserManager():
     def __init__(self):
         self.users = Users
-        self.status = UserStatus()
-        self.reply_status = ReplyStatus()
-        self.type = UserType()
+        self.status = Enum('busy', 'leave', 'online', 'offline')
+        self.reply_status = Enum('reply', 'no_reply')
+        self.type = Enum('administrator', 'user', 'user_b')
+
+    def _get(self, user_id):
+        if self.users.has_key(user_id):
+            return self.users[user_id]
+        else:
+            raise UserManagerError, 'User %s not exist' % user_id
 
     def add(self, user_id, info):
         self.users[user_id] = {
             'status': 0,
-            'event': [Event()],
+            'event': [],
             'sessions': [],
             'info': info,
             }
+        self.add_event(user_id)
 
-    def add_session(self, user_id, session_id):
-        self.users[user_id]['sessions'].append(session_id)
+    def get_info(self, user_id):
+        return self._get(user_id)['info']
 
-    def remove_session(self, user_id, session_id):
-        self.users[user_id]['sessions'].remove(session_id)
-
-    def get_sessions(self, user_id):
-        return self.users[user_id]['sessions']
-
-    def get_user(self, user_id):
-        if self.users.has_key(user_id):
-            return self.users[user_id]['info']
-        else:
-            return None
+    def remove(self, user_id):
+        del self._get(user_id)
 
     def is_exist(self, user_id):
         return self.users.has_key(user_id)
 
+    def add_session(self, user_id, session_id):
+        self._get(user_id)['sessions'].append(session_id)
+
+    def get_sessions(self, user_id):
+        return self._get(user_id)['sessions']
+
+    def remove_session(self, user_id, session_id):
+        self._get(user_id)['sessions'].remove(session_id)
+
     def is_exist_session(self, user_id, session_id):
         return session_id in self.get_sessions(user_id)
 
-    def get_event(self, user_id):
-        if len(self.users[user_id]['event']) > 1:
-            del self.users[user_id]['event'][0]
-        return self.users[user_id]['event'][-1]
-
     def add_event(self, user_id):
-        self.users[user_id]['event'].append(Event())
+        self._get(user_id)['event'].append(Event())
+
+    def get_event(self, user_id):
+        if len(self._get(user_id)['event']) > 1:
+            del self._get(user_id)['event'][0: -1]
+        return self._get(user_id)['event'][-1]
 
     def get_status(self, user_id):
-        if self.users.has_key(user_id):
-            return self.users[user_id]['status']
-        else:
-            return self.status.offline
+        return self._get(user_id)['status']
 
     def set_status(self, user_id, status):
-        self.users[user_id]['status'] = status
-
-    def delete(self, user_id):
-        if self.users.has_key(user_id):
-            del self.users[user_id]
+        self._get(user_id)['status'] = status
