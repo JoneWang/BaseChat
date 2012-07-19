@@ -1,39 +1,22 @@
 # coding=utf-8
 from gevent.event import Event
 
+
 Users = {}
-
-
-class Busy(): pass;busy = Busy()
-
-
-class Leave(): pass;leave = Leave()
-
-
-class Online(): pass;online = Online()
-
-
-class Offline(): pass;offline = Offline()
-
-
-class Reply(): pass;reply = Reply()
-
-
-class NoReply(): pass;no_reply = NoReply()
 
 
 class UserStatus():
     def __init__(self):
-        self.busy = busy
-        self.leave = leave
-        self.online = online
-        self.offline = offline
+        self.busy = 1
+        self.leave = 2
+        self.online = 3
+        self.offline = 4
 
 
 class ReplyStatus():
     def __init__(self):
-        self.reply = reply
-        self.no_reply = no_reply
+        self.reply = 1
+        self.no_reply = 2
 
 
 class UserType():
