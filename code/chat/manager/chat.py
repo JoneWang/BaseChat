@@ -1,3 +1,4 @@
+# encoding=utf-8
 import uuid
 from bchat.core.user import User
 from bchat.core.session import Session
