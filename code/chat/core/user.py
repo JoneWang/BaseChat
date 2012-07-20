@@ -1,12 +1,11 @@
 # coding=utf-8
 from gevent.event import Event
-from chat.lib.enum import Enum
 
 
-Users = {}
+Users_data = {}
 
 
-class UserManagerError(Exception):
+class UserError(Exception):
     def __init__(self, msg):
         self.msg = msg
 
@@ -14,22 +13,19 @@ class UserManagerError(Exception):
         return repr(self.msg)
 
 
-class UserManager():
+class User():
     def __init__(self):
-        self.users = Users
-        self.status = Enum('busy', 'leave', 'online', 'offline')
-        self.reply_status = Enum('reply', 'no_reply')
-        self.type = Enum('administrator', 'user', 'user_b')
+        self.users = Users_data
 
     def _get(self, user_id):
-        if self.users.has_key(user_id):
+        if self.is_exist(user_id):
             return self.users[user_id]
         else:
             raise UserManagerError, 'User %s not exist' % user_id
 
-    def add(self, user_id, info):
+    def add(self, user_id, info, online_status):
         self.users[user_id] = {
-            'status': 0,
+            'status': online_status,
             'event': [],
             'sessions': [],
             'info': info,
@@ -54,7 +50,7 @@ class UserManager():
     def remove_session(self, user_id, session_id):
         self._get(user_id)['sessions'].remove(session_id)
 
-    def is_exist_session(self, user_id, session_id):
+    def session_is_exist(self, user_id, session_id):
         return session_id in self.get_sessions(user_id)
 
     def add_event(self, user_id):
