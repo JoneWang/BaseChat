@@ -1,6 +1,5 @@
 # coding=utf-8
 import uuid
-from core.enum import *
 
 
 Sessions_data = {}
@@ -37,14 +36,13 @@ class Session():
     def remove(self, session_id):
         del self._get(session_id)
 
-    def add_user(self, session_id, user_id, is_reply=None):
-        if not is_reply: is_reply = MessageIsReplyEnum.reply
+    def add_user(self, session_id, user_id, is_reply):
         self._get(session_id)['users'][user_id] = {
             'unread_msg': {'messages': [], 'notices': []},
             'is_reply': is_reply
         }
 
-    def del_user(self, session_id, user_id):
+    def remove_user(self, session_id, user_id):
         del self._get(session_id)['users'][user_id]
 
     def get_unread_notices(self, session_id, user_id):
