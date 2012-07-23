@@ -26,7 +26,7 @@ class Session():
     def add(self, session_id, info):
         self.sessions[session_id] = {
             'users': {},
-            'msgs': {'messages': [], 'notices': []},
+            'msgs': {'messages': {}, 'notices': {}},
             'info': info,
             }
 
@@ -45,23 +45,11 @@ class Session():
     def remove_user(self, session_id, user_id):
         del self._get(session_id)['users'][user_id]
 
-    def get_unread_notices(self, session_id, user_id):
-        return self._get(session_id)['users'][user_id]['unread_msg']['notices']
-
-    def get_unread_message(self, session_id, user_id):
-        return self._get(session_id)['users'][user_id]['unread_msg']['messages']
-
     def is_reply(self, session_id, user_id):
         return self._get(session_id)['users'][user_id]['is_reply']
 
     def get_users(self, session_id):
         return self._get(session_id)['users'].keys()
-
-    def get_notices(self, session_id):
-        return self._get(session_id)['msgs']['notices']
-
-    def get_messages(self, session_id):
-        return self._get(session_id)['msgs']['messages']
 
     def is_exist(self, session_id):
         return self.sessions.has_key(session_id)
@@ -69,14 +57,49 @@ class Session():
     def user_is_exist(self, session_id, user_id):
         return self._get(session_id).has_key(user_id)
 
+    def get_notices(self, session_id):
+        return self._get(session_id)['msgs']['notices']
+
+    def get_messages(self, session_id):
+        return self._get(session_id)['msgs']['messages']
+
+    def _new_index(self, msgs):
+        if len(msgs) > 0:
+            index = msgs.keys()[-1] + 1
+        else:
+            index = 0
+        return index
+
+    def add_notice(self, session_id, data):
+        index = self._new_index(self.get_notices(session_id))
+        self.get_notices(session_id)[index] = data
+        return index
+
+    def add_message(self, session_id, data):
+        index = self._new_index(self.get_messages(session_id))
+        self.get_messages(session_id)[index] = data
+        return index
+
+    def add_unread_notice(self, session_id, user_id, index):
+        self.get_unread_notices(session_id, user_id).append(index)
+
+    def add_unread_message(self, session_id, user_id, index):
+        self.get_unread_messages(session_id, user_id).append(index)
+
+    def get_unread_notices(self, session_id, user_id):
+        return self._get(session_id)['users'][user_id]['unread_msg']['notices']
+
+    def get_unread_messages(self, session_id, user_id):
+        return self._get(session_id)['users'][user_id]['unread_msg']['messages']
+
+    def extend_unread_notices(self, session_id, user_id, indexs):
+        self.get_unread_notices(session_id, user_id).extend(values)
+
+    def extend_unread_messages(self, session_id, user_id, indexs):
+        self.get_unread_messages(session_id, user_id).extend(values)
+
     def unread_notices_clean(self, session_id, user_id):
-        self._get(session_id)['users'][user_id]['unread_msg']['notices'] = []
+        self.get_unread_notices(session_id, user_id) = []
 
     def unread_messages_clean(self, session_id, user_id):
-        self._get(session_id)['users'][user_id]['unread_msg']['messages'] = []
-
-    def extend_notices(self, session_id, user_id, values):
-        self._get(session_id)['users'][user_id]['unread_msg']['notices'].extend(values)
-
-    def extend_messages(self, session_id, user_id, values):
-        self._get(session_id)['users'][user_id]['unread_msg']['messages'].extend(values)
+        self.get_unread_messages(session_id, user_id) = []
