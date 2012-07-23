@@ -1,5 +1,4 @@
 # coding=utf-8
-from gevent.event import Event
 
 
 Users_data = {}
@@ -30,7 +29,6 @@ class User():
             'sessions': [],
             'info': info,
             }
-        self.add_event(user_id)
 
     def get_info(self, user_id):
         return self._get(user_id)['info']
@@ -53,11 +51,11 @@ class User():
     def session_is_exist(self, user_id, session_id):
         return session_id in self.get_sessions(user_id)
 
-    def add_event(self, user_id):
-        self._get(user_id)['event'].append(Event())
+    def add_event(self, user_id, Event):
+        self._get(user_id)['event'].append(Event)
 
     def get_event(self, user_id):
-        if len(self._get(user_id)['event']) > 1:
+        if len(self._get(user_id)['event']) > 2:
             del self._get(user_id)['event'][0: -1]
         return self._get(user_id)['event'][-1]
 

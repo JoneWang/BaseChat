@@ -5,6 +5,8 @@ from bchat.core.session import Session
 from bchat.enum import *
 from bchat.lib import common
 
+from gevent.event import Event
+
 
 class ChatManager():
     def __init__(self):
@@ -14,6 +16,7 @@ class ChatManager():
     def add_user(self, user_id, info, online_status=None):
         if not online_status: online_status = UserOnlineStatusEnum.offline
         self.USER.add(user_id, info, online_status)
+        self.USER.add_event(user_id, Event())
 
     def create_session(self, info, session_id=None):
         if not session_id: session_id = str(uuid.uuid1())
