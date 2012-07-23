@@ -15,11 +15,8 @@ class ChatManager():
         if not online_status: online_status = UserOnlineStatusEnum.offline
         self.USER.add(user_id, info, online_status)
 
-    def create_session(self, session_id=None, info=None, creater_id=None):
+    def create_session(self, info, session_id=None):
         if not session_id: session_id = str(uuid.uuid1())
-        if not info: info = {'create_time': common.current_time()}
-        if user_id:
-            info.update({'creater_id': creater_id})
         self.SESSION.add(session_id, info)
         return session_id
 
